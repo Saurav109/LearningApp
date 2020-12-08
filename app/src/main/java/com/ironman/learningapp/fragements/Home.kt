@@ -6,63 +6,80 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ironman.learningapp.adapters.HomeAdapter
 import com.ironman.learningapp.databinding.HomeLayoutBinding
+import com.ironman.learningapp.viewModels.HomeUserListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.log
 
-class Home:Fragment() {
+class Home : Fragment() {
 
     private lateinit var homeLayoutBinding: HomeLayoutBinding
-    private val titleText = MutableLiveData<String>()
-    private val homeUserListViewModel = MutableLiveData<List<HomeAdapter.User>>()
     private lateinit var homeAdapter: HomeAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        homeLayoutBinding= HomeLayoutBinding.inflate(inflater,container,false)
+    //
+    private val model: HomeUserListViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        homeLayoutBinding = HomeLayoutBinding.inflate(inflater, container, false)
         return homeLayoutBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        titleText.value= "before"
+        val initialList = ArrayList<HomeAdapter.User>()
+        initialList.add(HomeAdapter.User("sdsd", 209))
+        model.myList.postValue(initialList)
 
+        homeAdapter = HomeAdapter(initialList)
 
-        titleText.observe(this, {
-            homeLayoutBinding.titleText.text=it
-        })
-        homeUserListViewModel.value= listOf(HomeAdapter.User("dsds",3),HomeAdapter.User("dsds",3))
-        homeLayoutBinding.homeRecyclerView.layoutManager=LinearLayoutManager(context)
-        homeAdapter= HomeAdapter(homeUserListViewModel.value!!)
-        homeLayoutBinding.homeRecyclerView.adapter=homeAdapter
+        homeLayoutBinding.homeRecyclerView.layoutManager = LinearLayoutManager(context)
+        homeLayoutBinding.homeRecyclerView.adapter = homeAdapter
+        homeAdapter.notifyDataSetChanged()
 
-
-        homeUserListViewModel.observe(this, {
-            Log.d("MY_TAG", "onViewCreated: homeUserListViewModel")
+        model.myList.observe(viewLifecycleOwner, Observer {
+            Log.d("MY_TAG", "onViewCreated: notify ")
             homeAdapter.setValues(it)
         })
-
-
-
         CoroutineScope(Default).launch {
-            changeText("after")
+            changeText()
+            changeText()
+            changeText()
+            changeText()
         }
     }
 
-    private suspend fun changeText(text:String){
-        delay(2*1000)
-        withContext(Main){
-            titleText.value=text
-            homeUserListViewModel.value?.toMutableList()?.add(HomeAdapter.User("sdsd",20))
-            Log.d("MY_TAG", "changeText: size:"+ homeUserListViewModel.value!!.size)
+    private suspend fun changeText() {
+        delay(2 * 1000)
+        withContext(Main) {
+
+            val list = ArrayList<HomeAdapter.User>()
+            model.myList.value?.let { list.addAll(it) }
+            list.add(HomeAdapter.User("dsd", 32))
+            list.add(HomeAdapter.User("dsd", 32))
+            list.add(HomeAdapter.User("dsd", 32))
+            list.add(HomeAdapter.User("dsd", 32))
+            list.add(HomeAdapter.User("dsd", 32))
+            list.add(HomeAdapter.User("dsd", 32))
+
+
+            model.myList.postValue(list)
         }
     }
+
 
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/home2">
+
+    <fragment
+        tools:layout="@layout/home_layout"
+        android:id="@+id/home2"
+        android:name="com.ironman.learningapp.fragements.Home"
+        android:label="Home" >
+        <action
+            android:id="@+id/action_home2_to_newFragment"
+            app:destination="@id/newFragment" >
+            <argument android:defaultValue=""
+                app:argType="string"
+                android:name="title"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/newFragment"
+        android:name="com.ironman.learningapp.fragements.NewFragment"
+        android:label="fragment_new"
+        tools:layout="@layout/fragment_new" >
+        <action android:id="@+id/newFragment_to_my_activity"
+            app:destination="@+id/my_activity_id" />
+
+    </fragment>
+    <activity android:name="com.ironman.learningapp.MyActivity"
+        android:label="my"
+        android:id="@+id/my_activity_id"
+        tools:layout="@layout/my_activity"/>
+
+</navigation>

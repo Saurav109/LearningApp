@@ -1,8 +1,12 @@
 package com.ironman.learningapp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.ironman.learningapp.R
 import com.ironman.learningapp.databinding.ItemViewBinding
 
 class HomeAdapter(private var list: List<User>) :
@@ -28,6 +32,7 @@ class HomeAdapter(private var list: List<User>) :
 
     fun setValues(list:List<User>){
         this.list=list
+        Log.d("MY_TAG", "setValues: size"+list.size)
         notifyDataSetChanged()
     }
 
@@ -35,6 +40,13 @@ class HomeAdapter(private var list: List<User>) :
         RecyclerView.ViewHolder(itemViewBinding.root) {
         fun setValues(user: User) {
             itemViewBinding.textView.text = user.name
+            itemViewBinding.root.setOnClickListener {
+                //
+                val value="This is title"
+                val bundle= bundleOf("title" to value)
+                it.findNavController().navigate(R.id.action_home2_to_newFragment,bundle)
+                //
+            }
         }
 
     }

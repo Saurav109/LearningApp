@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_activity_nav"
+    app:startDestination="@id/myNewActivityFragment">
+
+    <fragment
+        tools:layout="@layout/new_frag_layout"
+        android:id="@+id/myNewActivityFragment"
+        android:name="com.ironman.learningapp.fragements.MyNewActivityFragment"
+        android:label="MyNewActivityFragment">
+        <action android:id="@+id/to_main_activity"
+            app:destination="@id/main" />
+    </fragment>
+    <activity
+        tools:layout="@layout/activity_main"
+        android:id="@+id/main"
+        android:name="com.ironman.learningapp.MainActivity"/>
+</navigation>
